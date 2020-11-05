@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+from os import environ
+from os.path import join
+
+WD = environ["WD"]
+TEMPLATE = """
+SHADER_VERT = `
+{vert}`;
+SHADER_FRAG = `
+{frag}`;
+"""
+
+
+def main():
+    source = {}
+    for key in ["vert", "frag"]:
+        with open(join(WD, "src", "shader.{}".format(key)), "r") as file:
+            source[key] = file.read().replace("`", "")
+    with open(join(WD, "out", "shaders.js"), "w") as file:
+        file.write(TEMPLATE.format(**source))
+
+
+if __name__ == "__main__":
+    main()

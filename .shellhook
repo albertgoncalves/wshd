@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+export WD=$PWD
+
+if [ "$(uname -s)" = "Darwin" ]; then
+    alias ls="ls --color=auto"
+    alias ll="ls -l"
+else
+    alias open="xdg-open"
+fi
+
+if [ ! -d "$WD/out" ]; then
+    mkdir "$WD/out"
+fi
+
+if [ ! -f "$WD/.init" ]; then
+    cd "$WD" || exit
+    npm install --no-save jshint
+    touch "$WD/.init"
+    cd "$WD" || exit
+fi
+
+sedtrailing () {
+    sed -i 's/[ \t]\+$//' "$1"
+    sed -i '/^$/d' "$1"
+}
+
+export -f sedtrailing
+
+htmlfmt () {
+    tidy -config $WD/.tidyrc -q -m "$1" && sedtrailing "$1"
+}
+
+jsfmt () {
+    npx jshint --verbose -c $WD/.jshintrc "$1" && clang-format -i "$1"
+}
+
+export -f htmlfmt
+export -f jsfmt
+alias clangfmt="clang-format -i"
