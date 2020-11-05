@@ -10,6 +10,7 @@ void main() {
     gl_Position = vec4(POSITION, 0.0, 1.0);
 }
 `;
+
 SHADER_FRAG = `
 /* NOTE: See https://thebookofshaders.com/13/. */
 /* NOTE: @patriciogv (2015)
