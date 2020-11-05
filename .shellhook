@@ -9,10 +9,6 @@ else
     alias open="xdg-open"
 fi
 
-if [ ! -d "$WD/out" ]; then
-    mkdir "$WD/out"
-fi
-
 if [ ! -f "$WD/.init" ]; then
     cd "$WD" || exit
     npm install --no-save jshint
