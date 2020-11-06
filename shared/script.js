@@ -56,12 +56,14 @@ function main() {
         1.0,
     ]);
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+    var uniformMouse = gl.getUniformLocation(program, "MOUSE");
+    gl.uniform2f(uniformMouse, width / 2.0, height / 2.0);
+    var box = canvas.getBoundingClientRect();
     function mouseMove(event) {
-        var box = canvas.getBoundingClientRect();
         var x = event.clientX - box.left;
         var y = event.clientY - box.top;
         if ((0.0 <= x) && (x < width) && (0.0 <= y) && (y < height)) {
-            gl.uniform2f(gl.getUniformLocation(program, "MOUSE"), x, y);
+            gl.uniform2f(uniformMouse, x, y);
         }
     }
     window.addEventListener("mousemove", mouseMove, false);
