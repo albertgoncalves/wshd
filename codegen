@@ -16,7 +16,7 @@ SHADER_FRAG = `
 def main():
     source = {}
     for key in ["vert", "frag"]:
-        with open(join(WD, "src", "shader.{}".format(key)), "r") as file:
+        with open(join(WD, "src", "{}.glsl".format(key)), "r") as file:
             source[key] = file.read().replace("`", "")
     with open(join(WD, "out", "shaders.js"), "w") as file:
         file.write(TEMPLATE.format(**source))

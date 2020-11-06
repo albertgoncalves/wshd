@@ -24,13 +24,14 @@ sedtrailing () {
 export -f sedtrailing
 
 htmlfmt () {
-    tidy -config $WD/.tidyrc -q -m "$1" && sedtrailing "$1"
+    tidy -config "$WD/.tidyrc" -q -m "$1" && sedtrailing "$1"
 }
 
 jsfmt () {
-    npx jshint --verbose -c $WD/.jshintrc "$1" && clang-format -i "$1"
+    npx jshint --verbose -c "$WD/.jshintrc" "$1" \
+        && clang-format -i --verbose "$1"
 }
 
 export -f htmlfmt
 export -f jsfmt
-alias clangfmt="clang-format -i"
+alias clangfmt="clang-format -i --verbose"
