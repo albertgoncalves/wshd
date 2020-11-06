@@ -1,0 +1,44 @@
+body {
+    background-color: hsl(0, 0%, 98%);
+    font-family: "Lucida Console", Monaco, "Andale Mono", monospace;
+    font-size: 20px;
+    -webkit-text-size-adjust: 100%;
+}
+
+canvas {
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -o-crisp-edges;
+    image-rendering: pixelated;
+    margin-top: 50px;
+    display: block;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table {
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 50px;
+}
+
+tr:hover {
+    background-color: hsl(0, 0%, 95%);
+}
+
+a {
+    color: hsl(0, 0%, 20%);
+}
+
+div.center {
+    text-align: center;
+}

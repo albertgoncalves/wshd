@@ -1,20 +1,6 @@
-
-SHADER_VERT = `
-#ifdef GL_ES
-precision mediump float;
-#endif
-
-attribute vec2 POSITION;
-
-void main() {
-    gl_Position = vec4(POSITION, 0.0, 1.0);
-}
-`;
-
-SHADER_FRAG = `
-/* NOTE: See https://thebookofshaders.com/13/. */
+/* NOTE: See `https://thebookofshaders.com/13/`. */
 /* NOTE: @patriciogv (2015)
- * See http://patriciogonzalezvivo.com.
+ * See `http://patriciogonzalezvivo.com`.
  */
 
 #ifdef GL_ES
@@ -29,7 +15,7 @@ float random(in vec2 st) {
     return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
-/* NOTE: See https://www.shadertoy.com/view/4dS3Wd. */
+/* NOTE: See `https://www.shadertoy.com/view/4dS3Wd`. */
 float noise(in vec2 st) {
     vec2 i = floor(st);
     vec2 f = fract(st);
@@ -43,7 +29,7 @@ float noise(in vec2 st) {
         ((d - b) * u.x * u.y);
 }
 
-#define N_OCTAVES 5
+#define N_OCTAVES 4
 
 float fbm(in vec2 st) {
     float v = 0.0;
@@ -61,7 +47,7 @@ float fbm(in vec2 st) {
 
 void main() {
     vec2 st = (gl_FragCoord.xy / RESOLUTION.xy) * 3.0;
-    st += st * abs(sin(TIME * 0.1) * 3.0);
+    st += st * abs(sin(TIME * 0.05) * 3.0);
     vec3 color = vec3(0.0);
     vec2 q = vec2(0.0);
     q.x = fbm(st + (0.0 * TIME));
@@ -78,4 +64,3 @@ void main() {
     gl_FragColor =
         vec4(((f * f * f) + (0.6 * f * f) + (0.5 * f)) * color, 1.0);
 }
-`;

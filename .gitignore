@@ -2,13 +2,15 @@
 !.gitignore
 !shell.nix
 !.shellhook
-!codegen
 !.tidyrc
 !.clang-format
 !.jshintrc
 !*.html
 !*.css
-!src/
 !*.js
 !*.glsl
+!*.py
 !out/
+!shared/
+!src/
+!src/**
