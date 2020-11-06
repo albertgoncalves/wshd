@@ -18,7 +18,7 @@ HTML_TEMPLATE = """
         <div class="center">
             <a href="../index.html">back</a>
         </div>
-        <canvas id="canvas" width="768" height="768"></canvas>
+        <canvas id="canvas" width="512" height="512"></canvas>
         <script src="{}.js"></script>
         <script src="../shared/script.js"></script>
     </body>

@@ -3,7 +3,6 @@ precision mediump float;
 #endif
 
 uniform vec2 RESOLUTION;
-uniform vec2 MOUSE;
 uniform float TIME;
 
 void main() {
