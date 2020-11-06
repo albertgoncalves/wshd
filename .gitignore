@@ -10,5 +10,5 @@
 !*.css
 !src/
 !*.js
-!shader.*
+!*.glsl
 !out/
