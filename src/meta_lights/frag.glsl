@@ -14,6 +14,7 @@ vec2 translate(in vec2 coord) {
 }
 
 float f(in vec2 p1, in vec2 p0) {
+    /* NOTE: Equivalent to `0.03 / pow(distance(p1, p0), 2.0)`. */
     return 0.03 / (pow(p1.x - p0.x, 2.0) + pow(p1.y - p0.y, 2.0));
 }
 
@@ -38,9 +39,9 @@ void main() {
     vec3 color =
         vec3(pow((abs(norm.x + norm.y) * 2.0) + abs(norm.x - norm.y), 3.75));
     color = max(color, 1.0);
-    color.r *= length(pos0.xy - pixel.xy);
-    color.g *= length(pos1.xy - pixel.xy);
-    color.b *= length(pos2.xy - pixel.xy);
+    color.r *= distance(pos0, pixel);
+    color.g *= distance(pos1, pixel);
+    color.b *= distance(pos2, pixel);
     color *= pow(f(pos0, pixel) + f(pos1, pixel) + f(pos2, pixel), 1.35);
 
     gl_FragColor = vec4(color, 1.0);
