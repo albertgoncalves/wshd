@@ -26,5 +26,5 @@ void main() {
     vec3 color =
         vec3(sin_pos(coord.x / k), sin_pos(0.75 / k), cos_pos(coord.y / k)) +
         vec3(plot(x, coord.y, k));
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
 }
