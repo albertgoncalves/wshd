@@ -29,7 +29,7 @@ htmlfmt () {
 
 jsfmt () {
     npx jshint --verbose -c "$WD/.jshintrc" "$1" \
-        && clang-format -i --verbose "$1"
+        && clang-format -i "$1"
 }
 
 export -f htmlfmt

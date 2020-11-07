@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -eu
+
+shopt -s expand_aliases
+alias _find='find "$WD" -type f -not -path "$WD/node_modules/*"'
+
+_find -not -path "$WD/out/*" -name "*.js" | parallel "echo {} && jsfmt {}"
+_find -name "*.html" | parallel "echo {} && htmlfmt {}"
+_find -name "*.glsl" | parallel "echo {} && clang-format -i {}"
+
+python "$WD/shared/codegen.py"
