@@ -1,7 +1,5 @@
 SHADER_VERT = `
-#ifdef GL_ES
 precision mediump float;
-#endif
 
 attribute vec2 POSITION;
 
@@ -16,9 +14,7 @@ SHADER_FRAG = `
  * See http://patriciogonzalezvivo.com.
  */
 
-#ifdef GL_ES
 precision mediump float;
-#endif
 
 uniform vec2 RESOLUTION;
 uniform vec2 MOUSE;

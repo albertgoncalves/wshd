@@ -1,7 +1,5 @@
 SHADER_VERT = `
-#ifdef GL_ES
 precision mediump float;
-#endif
 
 attribute vec2 POSITION;
 
@@ -11,15 +9,17 @@ void main() {
 `;
 
 SHADER_FRAG = `
-#ifdef GL_ES
 precision mediump float;
-#endif
 
 uniform vec2 RESOLUTION;
 uniform float TIME;
 
+vec2 translate(in vec2 coord) {
+    return ((2.0 * coord) - RESOLUTION) / RESOLUTION;
+}
+
 void main() {
-    vec2 coord = gl_FragCoord.xy / RESOLUTION;
+    vec2 coord = translate(gl_FragCoord.xy);
     if (distance(vec2(0.0), coord) < 1.0) {
         gl_FragColor = vec4(abs(sin(TIME / 3.0)), coord.x, coord.y, 1.0);
     } else {

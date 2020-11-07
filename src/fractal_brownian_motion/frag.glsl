@@ -3,9 +3,7 @@
  * See `http://patriciogonzalezvivo.com`.
  */
 
-#ifdef GL_ES
 precision mediump float;
-#endif
 
 uniform vec2 RESOLUTION;
 uniform vec2 MOUSE;
