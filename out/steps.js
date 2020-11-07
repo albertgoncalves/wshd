@@ -16,17 +16,20 @@ precision mediump float;
 #endif
 
 uniform vec2 RESOLUTION;
+uniform vec2 MOUSE;
 
-float plot(in vec2 st, in float pct) {
-    return smoothstep(pct - 0.02, pct, st.y) -
-        smoothstep(pct, pct + 0.02, st.y);
+float curve(in float a, in float b, in float k) {
+    return smoothstep(a - k, a, b) - smoothstep(a, a + k, b);
 }
 
 void main() {
-    vec2 st = gl_FragCoord.xy / RESOLUTION;
-    float y = smoothstep(0.0, 0.5, st.x) - smoothstep(0.5, 1.0, st.x);
-    float pct = plot(st, y);
-    vec3 color = ((1.0 - pct) * vec3(y)) + (pct * vec3(1.0, 0.25, 0.75));
-    gl_FragColor = vec4(color, 1.0);
+    vec2 coord = gl_FragCoord.xy / RESOLUTION;
+    float k = 1.2;
+    float t =
+        clamp(((MOUSE.x / RESOLUTION.x) * (1.0 + k)) - (k / 2.0), 0.0, 1.0);
+    float y = smoothstep(0.0, t, coord.x) - smoothstep(t, 1.0, coord.x);
+    float z = curve(y, coord.y, 0.025);
+    gl_FragColor =
+        vec4(((1.0 - z) * vec3(y)) + (z * vec3(t, 1.0 - t, 0.5)), 1.0);
 }
 `;
