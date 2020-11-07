@@ -24,14 +24,14 @@ uniform vec2 RESOLUTION;
 uniform vec2 MOUSE;
 uniform float TIME;
 
-float random(in vec2 st) {
-    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+float random(in vec2 coord) {
+    return fract(sin(dot(coord.xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
 /* NOTE: See https://www.shadertoy.com/view/4dS3Wd. */
-float noise(in vec2 st) {
-    vec2 i = floor(st);
-    vec2 f = fract(st);
+float noise(in vec2 coord) {
+    vec2 i = floor(coord);
+    vec2 f = fract(coord);
     /* NOTE: Four corners in 2D of a tile. */
     float a = random(i);
     float b = random(i + vec2(1.0, 0.0));
@@ -44,31 +44,31 @@ float noise(in vec2 st) {
 
 #define N_OCTAVES 4
 
-float fbm(in vec2 st) {
+float fbm(in vec2 coord) {
     float v = 0.0;
     float a = 0.5;
     vec2 shift = vec2(100.0) + (MOUSE.xy / 1500.0);
     /* NOTE: Rotate to reduce axial bias. */
     mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
     for (int i = 0; i < N_OCTAVES; ++i) {
-        v += a * noise(st);
-        st = (rot * st * 2.0) + shift;
+        v += a * noise(coord);
+        coord = (rot * coord * 2.0) + shift;
         a *= 0.5;
     }
     return v;
 }
 
 void main() {
-    vec2 st = (gl_FragCoord.xy / RESOLUTION.xy) * 3.0;
-    st += st * abs(sin(TIME * 0.05) * 3.0);
+    vec2 coord = (gl_FragCoord.xy / RESOLUTION.xy) * 3.0;
+    coord += coord * abs(sin(TIME * 0.05) * 3.0);
     vec3 color = vec3(0.0);
     vec2 q = vec2(0.0);
-    q.x = fbm(st + (0.0 * TIME));
-    q.y = fbm(st + vec2(1.0));
+    q.x = fbm(coord + (0.0 * TIME));
+    q.y = fbm(coord + vec2(1.0));
     vec2 r = vec2(0.0);
-    r.x = fbm(st + (1.0 * q) + vec2(1.7, 9.2) + (0.15 * TIME));
-    r.y = fbm(st + (1.0 * q) + vec2(8.3, 2.8) + (0.126 * TIME));
-    float f = fbm(st + r);
+    r.x = fbm(coord + (1.0 * q) + vec2(1.7, 9.2) + (0.15 * TIME));
+    r.y = fbm(coord + (1.0 * q) + vec2(8.3, 2.8) + (0.126 * TIME));
+    float f = fbm(coord + r);
     color = mix(vec3(0.101961, 0.619608, 0.666667),
                 vec3(0.666667, 0.666667, 0.498039),
                 clamp((f * f) * 4.0, 0.0, 1.0));
