@@ -19,6 +19,7 @@ var BUFFER_DATA = new Float32Array([
 
 function main() {
     var canvas = document.getElementById("canvas");
+    var fps = document.getElementById("fps");
     var gl = canvas.getContext("webgl");
     var program = gl.createProgram();
     {
@@ -58,17 +59,23 @@ function main() {
     }
     var width = canvas.width;
     var height = canvas.height;
-    var mouse = {
-        x: width / 2.0,
-        y: height / 2.0,
+    var state = {
+        frame: {
+            time: 0.0,
+            count: 0,
+        },
+        mouse: {
+            x: width / 2.0,
+            y: height / 2.0,
+        },
     };
     var box = canvas.getBoundingClientRect();
     function mouseMove(event) {
         var x = event.clientX - box.left;
         var y = event.clientY - box.top;
         if ((0.0 <= x) && (x < width) && (0.0 <= y) && (y < height)) {
-            mouse.x = x;
-            mouse.y = height - y;
+            state.mouse.x = x;
+            state.mouse.y = height - y;
         }
     }
     window.addEventListener("mousemove", mouseMove, false);
@@ -76,9 +83,18 @@ function main() {
     var uniformTime = gl.getUniformLocation(program, "TIME");
     gl.uniform2f(gl.getUniformLocation(program, "RESOLUTION"), width, height);
     function loop(t) {
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
         gl.uniform1f(uniformTime, t / 2048.0);
-        gl.uniform2f(uniformMouse, mouse.x, mouse.y);
+        gl.uniform2f(uniformMouse, state.mouse.x, state.mouse.y);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        ++state.frame.count;
+        var elapsed = t - state.frame.time;
+        if (1000.0 < elapsed) {
+            fps.innerHTML = "<strong>" +
+                ((state.frame.count / elapsed) * 1000.0).toFixed(2) +
+                "</strong> fps";
+            state.frame.time = t;
+            state.frame.count = 0;
+        }
         requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);

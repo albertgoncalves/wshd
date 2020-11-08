@@ -20,8 +20,11 @@ HTML_TEMPLATE = """
             <h2>
                 {title}
             </h2>
+            <canvas id="canvas" width="512" height="512"></canvas>
+            <p id="fps">
+                &nbsp;
+            </p>
         </div>
-        <canvas id="canvas" width="512" height="512"></canvas>
         <script src="{filename}.js"></script>
         <script src="../shared/script.js"></script>
     </body>
