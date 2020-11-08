@@ -9,16 +9,18 @@ void main() {
 `;
 
 SHADER_FRAG = `
+#version 100
+
+precision mediump float;
+
+uniform float TIME;
+uniform vec2 MOUSE;
+uniform vec2 RESOLUTION;
+
 /* NOTE: See https://thebookofshaders.com/13/. */
 /* NOTE: @patriciogv (2015)
  * See http://patriciogonzalezvivo.com.
  */
-
-precision mediump float;
-
-uniform vec2 RESOLUTION;
-uniform vec2 MOUSE;
-uniform float TIME;
 
 float random(in vec2 coord) {
     return fract(sin(dot(coord.xy, vec2(12.9898, 78.233))) * 43758.5453123);

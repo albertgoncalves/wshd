@@ -1,13 +1,15 @@
+#version 100
+
+precision mediump float;
+
+uniform float TIME;
+uniform vec2 MOUSE;
+uniform vec2 RESOLUTION;
+
 /* NOTE: See `https://www.shadertoy.com/view/XdfGRH`. */
 /* NOTE: @danguafer (2013)
  * See `https://www.shadertoy.com/user/Danguafer`.
  */
-
-precision mediump float;
-
-uniform vec2 RESOLUTION;
-uniform vec2 MOUSE;
-uniform float TIME;
 
 vec2 translate(in vec2 coord) {
     return ((2.0 * coord) - RESOLUTION) / RESOLUTION;

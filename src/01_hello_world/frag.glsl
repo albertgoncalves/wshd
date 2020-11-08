@@ -1,7 +1,9 @@
+#version 100
+
 precision mediump float;
 
-uniform vec2 RESOLUTION;
 uniform float TIME;
+uniform vec2 RESOLUTION;
 
 vec2 translate(in vec2 coord) {
     return ((2.0 * coord) - RESOLUTION) / RESOLUTION;
