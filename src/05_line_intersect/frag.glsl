@@ -57,10 +57,12 @@ void main() {
     rects[3] = Rect(0.3, 0.525, 0.525, 0.825);
     rects[4] = Rect(0.125, 0.225, 0.35, 0.45);
     rects[5] = Rect(0.8, 0.9, 0.1, 0.2);
-    vec3 color = vec3(1.0);
+    vec3 color =
+        vec3(smoothstep(0.5, 0.95, 1.0 - distance(source.i, source.j)));
     for (int i = 0; i < N; ++i) {
         if (intersect(source, rects[i])) {
             color = vec3(0.0);
+            break;
         }
     }
     gl_FragColor = vec4(color, 1.0);
