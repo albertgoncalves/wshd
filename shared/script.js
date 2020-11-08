@@ -2,20 +2,26 @@
 
 "use strict";
 
-var BUFFER_DATA = new Float32Array([
-    -1.0,
-    -1.0,
-    1.0,
-    -1.0,
-    -1.0,
-    1.0,
-    1.0,
-    1.0,
-    1.0,
-    -1.0,
-    -1.0,
-    1.0,
+// clang-format off
+
+var BUFFER_TRIANGLES = new Float32Array([
+    -1.0, -1.0, // 0
+     1.0, -1.0, // 1
+    -1.0,  1.0, // 2
+     1.0,  1.0, // 3
+     1.0, -1.0, // 4
+    -1.0,  1.0, // 5
 ]);
+var UNIFORM_RECTS = new Float32Array([
+    0.3,   0.55,  0.2,   0.3,   // 0
+    0.725, 0.8,   0.275, 0.325, // 1
+    0.7,   0.95,  0.55,  0.725, // 2
+    0.3,   0.525, 0.525, 0.825, // 3
+    0.125, 0.225, 0.35,  0.45,  // 4
+    0.8,   0.9,   0.1,   0.2,   // 5
+]);
+
+// clang-format on
 
 function main() {
     var canvas = document.getElementById("canvas");
@@ -55,7 +61,7 @@ function main() {
             gl.enableVertexAttribArray(attribute);
             gl.vertexAttribPointer(attribute, 2, gl.FLOAT, false, 0, 0);
         }
-        gl.bufferData(gl.ARRAY_BUFFER, BUFFER_DATA, gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, BUFFER_TRIANGLES, gl.STATIC_DRAW);
     }
     var width = canvas.width;
     var height = canvas.height;
@@ -79,9 +85,10 @@ function main() {
         }
     }
     window.addEventListener("mousemove", mouseMove, false);
+    gl.uniform4fv(gl.getUniformLocation(program, "RECTS"), UNIFORM_RECTS);
+    gl.uniform2f(gl.getUniformLocation(program, "RESOLUTION"), width, height);
     var uniformMouse = gl.getUniformLocation(program, "MOUSE");
     var uniformTime = gl.getUniformLocation(program, "TIME");
-    gl.uniform2f(gl.getUniformLocation(program, "RESOLUTION"), width, height);
     function loop(t) {
         gl.uniform1f(uniformTime, t / 2048.0);
         gl.uniform2f(uniformMouse, state.mouse.x, state.mouse.y);

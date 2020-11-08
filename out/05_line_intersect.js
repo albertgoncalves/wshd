@@ -16,17 +16,9 @@ precision mediump float;
 uniform vec2 MOUSE;
 uniform vec2 RESOLUTION;
 
-struct Edge {
-    vec2 i;
-    vec2 j;
-};
+#define N 6
 
-struct Rect {
-    float bottom;
-    float top;
-    float left;
-    float right;
-};
+uniform vec4 RECTS[N];
 
 vec2 scale(in vec2 xy) {
     return xy / RESOLUTION;
@@ -36,42 +28,40 @@ bool ccw(in vec2 a, in vec2 b, in vec2 c) {
     return ((b.y - a.y) * (c.x - a.x)) < ((c.y - a.y) * (b.x - a.x));
 }
 
-bool intersect(in Edge a, in Edge b) {
-    return (ccw(a.i, b.i, b.j) != ccw(a.j, b.i, b.j)) &&
-        (ccw(a.i, a.j, b.i) != ccw(a.i, a.j, b.j));
+/* NOTE: Edge a decomposes into two points: a.xy, a.zw. */
+bool intersect_edge_edge(in vec4 a, in vec4 b) {
+    return (ccw(a.xy, b.xy, b.zw) != ccw(a.zw, b.xy, b.zw)) &&
+        (ccw(a.xy, a.zw, b.xy) != ccw(a.xy, a.zw, b.zw));
 }
 
-bool intersect(in Edge e, in Rect r) {
-    if (intersect(e, Edge(vec2(r.left, r.bottom), vec2(r.right, r.bottom)))) {
+/* NOTE: Rect r is determined by four float values:
+ *  bottom -> vec4.x
+ *  top    ->     .y
+ *  left   ->     .z
+ *  right  ->     .w
+ */
+bool intersect_edge_rect(in vec4 e, in vec4 r) {
+    if (intersect_edge_edge(e, vec4(r.z, r.x, r.w, r.x))) {
         return true;
     }
-    if (intersect(e, Edge(vec2(r.left, r.top), vec2(r.right, r.top)))) {
+    if (intersect_edge_edge(e, vec4(r.z, r.y, r.w, r.y))) {
         return true;
     }
-    if (intersect(e, Edge(vec2(r.left, r.bottom), vec2(r.left, r.top)))) {
+    if (intersect_edge_edge(e, vec4(r.z, r.x, r.z, r.y))) {
         return true;
     }
-    if (intersect(e, Edge(vec2(r.right, r.bottom), vec2(r.right, r.top)))) {
+    if (intersect_edge_edge(e, vec4(r.w, r.x, r.w, r.y))) {
         return true;
     }
     return false;
 }
 
-#define N 6
-
 void main() {
-    Edge source = Edge(scale(gl_FragCoord.xy), scale(MOUSE));
-    Rect rects[N];
-    rects[0] = Rect(0.3, 0.55, 0.2, 0.3);
-    rects[1] = Rect(0.725, 0.8, 0.275, 0.325);
-    rects[2] = Rect(0.7, 0.95, 0.55, 0.725);
-    rects[3] = Rect(0.3, 0.525, 0.525, 0.825);
-    rects[4] = Rect(0.125, 0.225, 0.35, 0.45);
-    rects[5] = Rect(0.8, 0.9, 0.1, 0.2);
+    vec4 source = vec4(scale(gl_FragCoord.xy), scale(MOUSE));
     vec3 color =
-        vec3(smoothstep(0.5, 0.95, 1.0 - distance(source.i, source.j)));
+        vec3(1.0 - smoothstep(0.05, 0.5, distance(source.xy, source.zw)));
     for (int i = 0; i < N; ++i) {
-        if (intersect(source, rects[i])) {
+        if (intersect_edge_rect(source, RECTS[i])) {
             color = vec3(0.0);
             break;
         }
