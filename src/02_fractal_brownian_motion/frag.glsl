@@ -11,14 +11,14 @@ uniform vec2 RESOLUTION;
  * See `http://patriciogonzalezvivo.com`.
  */
 
-float random(in vec2 coord) {
-    return fract(sin(dot(coord.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+float random(in vec2 xy) {
+    return fract(sin(dot(xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
 /* NOTE: See `https://www.shadertoy.com/view/4dS3Wd`. */
-float noise(in vec2 coord) {
-    vec2 i = floor(coord);
-    vec2 f = fract(coord);
+float noise(in vec2 xy) {
+    vec2 i = floor(xy);
+    vec2 f = fract(xy);
     /* NOTE: Four corners in 2D of a tile. */
     float a = random(i);
     float b = random(i + vec2(1.0, 0.0));
@@ -31,22 +31,22 @@ float noise(in vec2 coord) {
 
 #define N_OCTAVES 4
 
-float fbm(in vec2 coord) {
+float fbm(in vec2 xy) {
     float v = 0.0;
     float a = 0.5;
-    vec2 shift = vec2(100.0) + (MOUSE.xy / 1500.0);
+    vec2 shift = vec2(100.0) + (MOUSE / 1500.0);
     /* NOTE: Rotate to reduce axial bias. */
     mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
     for (int i = 0; i < N_OCTAVES; ++i) {
-        v += a * noise(coord);
-        coord = (rot * coord * 2.0) + shift;
+        v += a * noise(xy);
+        xy = (rot * xy * 2.0) + shift;
         a *= 0.5;
     }
     return v;
 }
 
 void main() {
-    vec2 coord = (gl_FragCoord.xy / RESOLUTION.xy) * 3.0;
+    vec2 coord = (gl_FragCoord.xy / RESOLUTION) * 3.0;
     coord += coord * abs(sin(TIME * 0.05) * 3.0);
     vec3 color = vec3(0.0);
     vec2 q = vec2(0.0);

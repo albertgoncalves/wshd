@@ -22,11 +22,11 @@ uniform vec2 RESOLUTION;
  * See https://www.shadertoy.com/user/Danguafer.
  */
 
-vec2 translate(in vec2 coord) {
-    return ((2.0 * coord) - RESOLUTION) / RESOLUTION;
+vec2 translate(in vec2 xy) {
+    return ((2.0 * xy) - RESOLUTION) / RESOLUTION;
 }
 
-float f(in vec2 p1, in vec2 p0) {
+float f(in vec2 p0, in vec2 p1) {
     /* NOTE: Equivalent to 0.03 / pow(distance(p1, p0), 2.0). */
     return 0.03 / (pow(p1.x - p0.x, 2.0) + pow(p1.y - p0.y, 2.0));
 }

@@ -16,8 +16,8 @@ precision mediump float;
 uniform float TIME;
 uniform vec2 RESOLUTION;
 
-vec2 translate(in vec2 coord) {
-    return ((2.0 * coord) - RESOLUTION) / RESOLUTION;
+vec2 translate(in vec2 xy) {
+    return ((2.0 * xy) - RESOLUTION) / RESOLUTION;
 }
 
 void main() {
