@@ -30,22 +30,17 @@ bool intersect(in Edge a, in Edge b) {
         (ccw(a.i, a.j, b.i) != ccw(a.i, a.j, b.j));
 }
 
-bool intersect_edge_rect(in Edge edge, in Rect rect) {
-    Edge r;
-    r = Edge(vec2(rect.left, rect.bottom), vec2(rect.right, rect.bottom));
-    if (intersect(edge, r)) {
+bool intersect_edge_rect(in Edge e, in Rect r) {
+    if (intersect(e, Edge(vec2(r.left, r.bottom), vec2(r.right, r.bottom)))) {
         return true;
     }
-    r = Edge(vec2(rect.left, rect.top), vec2(rect.right, rect.top));
-    if (intersect(edge, r)) {
+    if (intersect(e, Edge(vec2(r.left, r.top), vec2(r.right, r.top)))) {
         return true;
     }
-    r = Edge(vec2(rect.left, rect.bottom), vec2(rect.left, rect.top));
-    if (intersect(edge, r)) {
+    if (intersect(e, Edge(vec2(r.left, r.bottom), vec2(r.left, r.top)))) {
         return true;
     }
-    r = Edge(vec2(rect.right, rect.bottom), vec2(rect.right, rect.top));
-    if (intersect(edge, r)) {
+    if (intersect(e, Edge(vec2(r.right, r.bottom), vec2(r.right, r.top)))) {
         return true;
     }
     return false;
