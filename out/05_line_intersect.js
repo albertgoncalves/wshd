@@ -41,7 +41,7 @@ bool intersect(in Edge a, in Edge b) {
         (ccw(a.i, a.j, b.i) != ccw(a.i, a.j, b.j));
 }
 
-bool intersect_edge_rect(in Edge e, in Rect r) {
+bool intersect(in Edge e, in Rect r) {
     if (intersect(e, Edge(vec2(r.left, r.bottom), vec2(r.right, r.bottom)))) {
         return true;
     }
@@ -68,11 +68,12 @@ void main() {
     rects[3] = Rect(0.3, 0.525, 0.525, 0.825);
     rects[4] = Rect(0.125, 0.225, 0.35, 0.45);
     rects[5] = Rect(0.8, 0.9, 0.1, 0.2);
-    gl_FragColor = vec4(1.0);
+    vec3 color = vec3(1.0);
     for (int i = 0; i < N; ++i) {
-        if (intersect_edge_rect(source, rects[i])) {
-            gl_FragColor = vec4(vec3(0.0), 1.0);
+        if (intersect(source, rects[i])) {
+            color = vec3(0.0);
         }
     }
+    gl_FragColor = vec4(color, 1.0);
 }
 `;
