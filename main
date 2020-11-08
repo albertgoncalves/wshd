@@ -2,11 +2,17 @@
 
 set -eu
 
-shopt -s expand_aliases
-alias _find='find "$WD" -type f -not -path "$WD/node_modules/*"'
+f () {
+    find \
+        "$WD" \
+        -type f \
+        -not -path "$WD/node_modules/*" \
+        -not -path "$WD/out/*" \
+        -name "$1"
+}
 
-_find -not -path "$WD/out/*" -name "*.js" | parallel "echo {} && jsfmt {}"
-_find -name "*.html" | parallel "echo {} && htmlfmt {}"
-_find -name "*.glsl" | parallel "echo {} && clang-format -i {}"
+f "*.js" | parallel "echo {} && jsfmt {}"
+f "*.html" | parallel "echo {} && htmlfmt {}"
+f "*.glsl" | parallel "echo {} && clang-format -i {}"
 
 python "$WD/shared/codegen.py"
