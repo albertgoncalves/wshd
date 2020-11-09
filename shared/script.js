@@ -3,7 +3,6 @@
 "use strict";
 
 // clang-format off
-
 var BUFFER_TRIANGLES = new Float32Array([
     -1.0, -1.0, // 0
      1.0, -1.0, // 1
@@ -20,7 +19,6 @@ var UNIFORM_RECTS = new Float32Array([
     0.125, 0.225, 0.35,  0.45,  // 4
     0.8,   0.9,   0.1,   0.2,   // 5
 ]);
-
 // clang-format on
 
 function main() {
@@ -48,20 +46,20 @@ function main() {
         }
         gl.attachShader(program, fragmentShader);
     }
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        console.error(gl.getProgramInfoLog(program));
+        return;
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, BUFFER_TRIANGLES, gl.STATIC_DRAW);
+    gl.clearColor(0.0, 0.0, 0.0, 0.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.useProgram(program);
     {
-        gl.linkProgram(program);
-        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            console.error(gl.getProgramInfoLog(program));
-            return;
-        }
-        gl.useProgram(program);
-        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-        {
-            var attribute = gl.getAttribLocation(program, "POSITION");
-            gl.enableVertexAttribArray(attribute);
-            gl.vertexAttribPointer(attribute, 2, gl.FLOAT, false, 0, 0);
-        }
-        gl.bufferData(gl.ARRAY_BUFFER, BUFFER_TRIANGLES, gl.STATIC_DRAW);
+        var attribute = gl.getAttribLocation(program, "POSITION");
+        gl.enableVertexAttribArray(attribute);
+        gl.vertexAttribPointer(attribute, 2, gl.FLOAT, false, 0, 0);
     }
     var width = canvas.width;
     var height = canvas.height;
@@ -75,16 +73,17 @@ function main() {
             y: height / 2.0,
         },
     };
-    var box = canvas.getBoundingClientRect();
-    function mouseMove(event) {
-        var x = event.clientX - box.left;
-        var y = event.clientY - box.top;
-        if ((0.0 <= x) && (x < width) && (0.0 <= y) && (y < height)) {
-            state.mouse.x = x;
-            state.mouse.y = height - y;
-        }
+    {
+        var box = canvas.getBoundingClientRect();
+        window.addEventListener("mousemove", function(event) {
+            var x = event.clientX - box.left;
+            var y = event.clientY - box.top;
+            if ((0.0 <= x) && (x < width) && (0.0 <= y) && (y < height)) {
+                state.mouse.x = x;
+                state.mouse.y = height - y;
+            }
+        }, false);
     }
-    window.addEventListener("mousemove", mouseMove, false);
     gl.uniform4fv(gl.getUniformLocation(program, "RECTS"), UNIFORM_RECTS);
     gl.uniform2f(gl.getUniformLocation(program, "RESOLUTION"), width, height);
     var uniformMouse = gl.getUniformLocation(program, "MOUSE");
