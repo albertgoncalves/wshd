@@ -2,17 +2,13 @@
 
 set -eu
 
-f () {
-    find \
-        "$WD" \
-        -type f \
-        -not -path "$WD/node_modules/*" \
-        -not -path "$WD/out/*" \
-        -name "$1"
-}
-
-f "*.js" | parallel "echo {} && jsfmt {}"
-f "*.html" | parallel "echo {} && htmlfmt {}"
-f "*.glsl" | parallel "echo {} && clang-format -i {}"
+jsfmt "$WD/shared/script.js"
+htmlfmt "$WD/index.html"
+find "$WD" \
+    -type f \
+    -not -path "$WD/node_modules/*" \
+    -not -path "$WD/out/*" \
+    -name "*.glsl" \
+    | parallel "echo {} && clang-format -i {}"
 
 python "$WD/shared/codegen.py"
